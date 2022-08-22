@@ -19,7 +19,9 @@ abstract contract ChainGame is ERC721 {
         totalSupply = 0;
     }
 
-    function registerGameItem(bytes calldata gameItemBytes) public {
+    /// @notice Main function to mint the game item
+    /// @param gameItemBytes Compiled smart contract that implements logic in the take turn function for execution in the game engine
+    function _registerGameItem(bytes calldata gameItemBytes) internal {
         require(!gameItemsTaken[keccak256(gameItemBytes)], "Game item taken");
         _gameItems[totalSupply] = GameItem({
             bytecode: gameItemBytes,
@@ -31,6 +33,9 @@ abstract contract ChainGame is ERC721 {
         totalSupply++;
     }
 
+    /// @notice return game item by tokenId
+    /// @param tokenId id of the NFT whose GameItem you want to inspect
+    /// @return gameItem GameItem struct associated with tokenId
     function getGameItem(uint256 tokenId)
         public
         view
